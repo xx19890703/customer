@@ -16,6 +16,10 @@ public class Dao<T, PK extends Serializable> {
 	protected Class<T> entityClass;
 	
 	
+	/**
+	 * 加一句
+	 * @param entityClass
+	 */
 	@SuppressWarnings("deprecation")
 	public Dao(Class<T> entityClass){
 		configuration = new Configuration().configure();
