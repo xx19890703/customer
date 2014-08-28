@@ -1,17 +1,19 @@
 package com.xx.frame;
 
-import javax.swing.JPanel;
-import javax.swing.JLabel;
-import javax.swing.JTextField;
 import java.awt.Font;
-import javax.swing.JComboBox;
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.JTextArea;
-import javax.swing.JScrollPane;
-import java.awt.Button;
-import javax.swing.JButton;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-public class Customer_Add extends JPanel {
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+
+public class Customer_Add extends JPanel implements ActionListener{
 	/**
 	 * 
 	 */
@@ -22,7 +24,8 @@ public class Customer_Add extends JPanel {
 	private JTextField textField_2;
 	private JTextField textField_3;
 	private JTextField textField_4;
-
+	private JTextArea textArea;
+	
 	/**
 	 * Create the panel.
 	 */
@@ -131,18 +134,35 @@ public class Customer_Add extends JPanel {
 		scrollPane.setBounds(151, 332, 514, 128);
 		add(scrollPane);
 		
-		JTextArea textArea = new JTextArea();
+		textArea = new JTextArea();
 		scrollPane.setViewportView(textArea);
 		
 		JButton btnNewButton = new JButton("保存");
 		btnNewButton.setFont(new Font("宋体", Font.PLAIN, 15));
 		btnNewButton.setBounds(151, 487, 95, 31);
+		btnNewButton.addActionListener(this);
 		add(btnNewButton);
 		
 		JButton button = new JButton("清空");
 		button.setFont(new Font("宋体", Font.PLAIN, 15));
 		button.setBounds(281, 487, 95, 31);
+		button.addActionListener(this);
 		add(button);
-
+	}
+	
+	
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		if (e.getActionCommand().equals("保存")) {
+			
+		} else if (e.getActionCommand().equals("清空")) {
+			textField.setText("");
+			textField_1.setText("");
+			textField_2.setText("");
+			textField_3.setText("");
+			textField_4.setText("");
+			textArea.setText("");
+		} else if (e.getActionCommand().equals("退出")) {
+		}
 	}
 }
