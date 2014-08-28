@@ -1,7 +1,9 @@
 package com.xx.publics.dao;
 
 import java.io.Serializable;
+import java.util.List;
 
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
@@ -33,10 +35,79 @@ public class Dao<T, PK extends Serializable> {
 		return sessionFactory.getCurrentSession();
 	}
 
+	/**
+	 * 保存
+	 * @param entity
+	 */
 	public void save(T entity) {
 		Session s = getSession();
 		s.getTransaction().begin();
 		s.saveOrUpdate(entity);
 		s.getTransaction().commit();
+	}
+	
+	/**
+	 * 删除
+	 * @param entity
+	 */
+	public void delete(T entity){
+		Session s = getSession();
+		s.getTransaction().begin();
+		s.delete(entity);
+		s.getTransaction().commit();
+	}
+	
+	public void delete(PK id){
+		Session s = getSession();
+		s.getTransaction().begin();
+		s.delete(s.load(entityClass, id));
+		s.getTransaction().commit();
+	}
+	
+	/**
+	 * 按id获取对象.
+	 */
+	@SuppressWarnings("unchecked")
+	public T get(final PK id) {
+		return (T) getSession().load(entityClass, id);
+	}
+	
+	/**
+	 * 按HQL查询对象列表.
+	 * 
+	 * @param hql hql语句
+	 * @param values 数量可变的参数
+
+
+	 */
+	@SuppressWarnings("rawtypes")
+	public List find(String hql, Object... values) {
+		return createQuery(hql, values).list();
+	}
+	/**
+	 * 按HQL查询唯一对象.
+	 */
+	public Object findUnique(String hql, Object... values) {
+		return createQuery(hql, values).uniqueResult();
+	}
+
+	/**
+	 * 按HQL查询Intger类形结果. 
+	 */
+	public Integer findInt(String hql, Object... values) {
+		return (Integer) findUnique(hql, values);
+	}
+	
+	/**
+	 * 根据查询函数与参数列表创建Query对象,后续可进行更多处理,辅助函数.
+	 */
+	public Query createQuery(String queryString, Object... values) {
+		Query queryObject = getSession().createQuery(queryString);
+		if (values != null) {
+			for (int i = 0; i < values.length; i++) {
+				queryObject.setParameter(i, values[i]);
+			}
+		}
+		return queryObject;
 	}
 }

@@ -16,7 +16,7 @@ public class Customer {
 	private String sex;//性别
 	private String address;//地址
 	private String tel;//电话
-	private String status;//状态
+	private String status;//状态 0使用 1作废
 	private String remarks;//备注
 
 	@Id

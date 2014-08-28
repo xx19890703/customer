@@ -40,6 +40,7 @@ public class Main extends JFrame implements ActionListener {
 			c.setId("2");
 			c.setUsername("谢谢");
 			cs.save(c);
+			//cs.delete(c);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
