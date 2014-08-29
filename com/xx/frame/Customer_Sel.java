@@ -5,7 +5,7 @@ import java.awt.Component;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Enumeration;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -13,12 +13,14 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.JTableHeader;
-import javax.swing.table.TableColumn;
 
-public class Customer_Sel extends JPanel {
+import com.xx.modal.Customer;
+import com.xx.service.CustomerService;
+
+public class Customer_Sel extends JPanel implements ActionListener{
 	/**
 	 * 
 	 */
@@ -26,7 +28,7 @@ public class Customer_Sel extends JPanel {
 	private JTextField textField;
 	private JTable table;
 	DefaultTableModel model;
-	String[] headers = {"编号", "表头一", "表头二", "表头三" };
+	String[] headers = {"序号","编号", "姓名", "性别", "电话", "年龄", "生日", "地址" };
 	Object[][] cellData = null;
 
 	DefaultTableCellRenderer tcr = new DefaultTableCellRenderer() {  
@@ -39,6 +41,7 @@ public class Customer_Sel extends JPanel {
             } else if (row % 2 == 1) {  
                 setBackground(new Color(206, 231, 255)); //设置偶数行底色  
             }  
+            this.setHorizontalAlignment(SwingConstants.CENTER);
             return super.getTableCellRendererComponent(table, value,  
                     isSelected, hasFocus, row, column);  
         }  
@@ -60,16 +63,7 @@ public class Customer_Sel extends JPanel {
 		textField.setColumns(10);
 
 		JButton btnNewButton = new JButton("查询");
-		btnNewButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				// TableColumnModel columnModel = table.getColumnModel();
-				String[] dd = {""+(model.getRowCount()+1), "一啊是大三的", "二七台河还给我", "三好多钱合肥市你好" };
-				model.addRow(dd);
-				for (int i = 0; i < table.getColumnCount(); i++) {  
-		            table.getColumn(table.getColumnName(i)).setCellRenderer(tcr);  
-		        }
-			}
-		});
+		btnNewButton.addActionListener(this);
 		btnNewButton.setBounds(218, 28, 62, 25);
 		add(btnNewButton);
 
@@ -84,11 +78,42 @@ public class Customer_Sel extends JPanel {
 				return false;
 			}
 		};
+		
+		
+	    //大小 字体
 		table.setFont(new Font("Dialog", 0, 19));
 		table.setRowHeight(22);
-		table.getColumnModel().getColumn(0).setPreferredWidth(1);  
+		
+		
+		//表格列宽
+		table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+		table.getColumn(headers[0]).setPreferredWidth(40);
+		table.getColumn(headers[1]).setPreferredWidth(120);
+		table.getColumn(headers[2]).setPreferredWidth(90);
+		table.getColumn(headers[3]).setPreferredWidth(40);
+		table.getColumn(headers[4]).setPreferredWidth(140);
+		table.getColumn(headers[5]).setPreferredWidth(80);
+		table.getColumn(headers[6]).setPreferredWidth(80);
+		table.getColumn(headers[7]).setPreferredWidth(140);
+		
 		scrollPane.setViewportView(table);
 
 	}
 	
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		while(model.getRowCount()>0){
+			model.removeRow(model.getRowCount()-1);
+		}
+		CustomerService cs= new CustomerService();
+		List<Customer> list=cs.findAll();
+		for(Customer c:list){
+			String[] dd = {""+(model.getRowCount()+1), c.getId(), c.getUsername(),c.getSex(),
+					c.getTel(),""+c.getAge(),c.getBrithday(),c.getAddress()};
+			model.addRow(dd);
+		}
+		for (int i = 0; i < table.getColumnCount(); i++) {  
+            table.getColumn(table.getColumnName(i)).setCellRenderer(tcr);  
+        }
+	}
 }

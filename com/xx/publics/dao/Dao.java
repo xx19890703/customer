@@ -82,27 +82,39 @@ public class Dao<T, PK extends Serializable> {
 	 */
 	@SuppressWarnings("rawtypes")
 	public List find(String hql, Object... values) {
-		return createQuery(hql, values).list();
+		Session s = getSession();
+		s.getTransaction().begin();
+		List list = createQuery(s,hql, values).list();
+		s.getTransaction().commit();
+		return list;
 	}
 	/**
 	 * 按HQL查询唯一对象.
 	 */
 	public Object findUnique(String hql, Object... values) {
-		return createQuery(hql, values).uniqueResult();
+		Session s = getSession();
+		s.getTransaction().begin();
+		Object list = createQuery(s,hql, values).uniqueResult();
+		s.getTransaction().commit();
+		return list;
 	}
 
 	/**
 	 * 按HQL查询Intger类形结果. 
 	 */
 	public Integer findInt(String hql, Object... values) {
-		return (Integer) findUnique(hql, values);
+		Session s = getSession();
+		s.getTransaction().begin();
+		Integer list = (Integer) findUnique(hql, values);
+		s.getTransaction().commit();
+		return list;
 	}
 	
 	/**
 	 * 根据查询函数与参数列表创建Query对象,后续可进行更多处理,辅助函数.
 	 */
-	public Query createQuery(String queryString, Object... values) {
-		Query queryObject = getSession().createQuery(queryString);
+	public Query createQuery(Session s,String queryString, Object... values) {
+		Query queryObject = s.createQuery(queryString);
 		if (values != null) {
 			for (int i = 0; i < values.length; i++) {
 				queryObject.setParameter(i, values[i]);
