@@ -10,6 +10,7 @@ import org.hibernate.cfg.Configuration;
 import org.hibernate.service.ServiceRegistry;
 import org.hibernate.service.ServiceRegistryBuilder;
 
+@SuppressWarnings("deprecation")
 public class Dao<T, PK extends Serializable> {
 
 	protected Configuration configuration = null;
@@ -22,7 +23,6 @@ public class Dao<T, PK extends Serializable> {
 	 * 加一句
 	 * @param entityClass
 	 */
-	@SuppressWarnings("deprecation")
 	public Dao(Class<T> entityClass){
 		configuration = new Configuration().configure();
 		serviceRegistry = new ServiceRegistryBuilder().applySettings(

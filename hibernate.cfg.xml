@@ -20,5 +20,6 @@
         <property name="hbm2ddl.auto">update</property>  
         <mapping class="com.xx.modal.Customer"/>
         <mapping class="com.xx.modal.Cardinfo"/>
+        <mapping class="com.xx.modal.Costinfo"/>
     </session-factory>  
 </hibernate-configuration> 

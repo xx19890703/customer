@@ -1,21 +1,17 @@
 package com.xx.frame;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.Graphics;
-import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-
-import com.xx.modal.Customer;
-import com.xx.service.CustomerService;
 
 public class Main extends JFrame implements ActionListener {
 
@@ -35,12 +31,6 @@ public class Main extends JFrame implements ActionListener {
 			Main frame = new Main();
 			frame.setVisible(true);
 
-			CustomerService cs = new CustomerService();
-			Customer c = new Customer();
-			c.setId("2");
-			c.setUsername("谢谢");
-			cs.save(c);
-			//cs.delete(c);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -66,25 +56,35 @@ public class Main extends JFrame implements ActionListener {
 		JMenu menu_1 = new JMenu("客户管理");
 		menuBar.add(menu_1);
 
-		JMenuItem menuItem_1 = new JMenuItem("新增客户");
+		JMenuItem menuItem_1 = new JMenuItem("客户编辑");
 		menuItem_1.addActionListener(this);
 		menu_1.add(menuItem_1);
 
-		JMenuItem menuItem_2 = new JMenuItem("查询客户");
+		JMenuItem menuItem_2 = new JMenuItem("客户查询");
 		menuItem_2.addActionListener(this);
 		menu_1.add(menuItem_2);
+		
+		JMenuItem menuItem_3 = new JMenuItem("会员卡信息");
+		menuItem_3.addActionListener(this);
+		menu_1.add(menuItem_3);
 
 		JMenu menu_2 = new JMenu("消费管理");
 		menuBar.add(menu_2);
+		
+		JMenuItem menuItem_4 = new JMenuItem("添加消费");
+		menuItem_4.addActionListener(this);
+		menu_2.add(menuItem_4);
 
 		JMenu menu_3 = new JMenu("统计");
 		menuBar.add(menu_3);
 		contentPane = new JPanel(){
-            @Override  
+			private static final long serialVersionUID = 1L;
+
+			@Override  
             protected void paintComponent(Graphics g) {  
-                ImageIcon icon = new ImageIcon("D://34.jpg");  
-                Image img = icon.getImage();  
-                g.drawImage(img, 0, 0, icon.getIconWidth(), icon.getIconHeight(), icon.getImageObserver());  
+//                ImageIcon icon = new ImageIcon("D://34.jpg");  
+//                Image img = icon.getImage();  
+//                g.drawImage(img, 0, 0, icon.getIconWidth(), icon.getIconHeight(), icon.getImageObserver());  
             }  
         };  
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -95,18 +95,35 @@ public class Main extends JFrame implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if (e.getActionCommand().equals("新增客户")) {
+		if (e.getActionCommand().equals("客户编辑")) {
 			Main.this.getContentPane().removeAll();
-			Main.this.getContentPane().add(new Customer_Add());// JPanel换成自己的panel
+			Main.this.getContentPane().add(new Customer_Add(Main.this,""));// JPanel换成自己的panel
 			Main.this.getContentPane().validate();
 			Main.this.getContentPane().repaint();
-		} else if (e.getActionCommand().equals("查询客户")) {
+		} else if (e.getActionCommand().equals("客户查询")) {
 			Main.this.getContentPane().removeAll();
 			Main.this.getContentPane().add(new Customer_Sel());// JPanel换成自己的panel
+			Main.this.getContentPane().validate();
+			Main.this.getContentPane().repaint();
+		} else if (e.getActionCommand().equals("会员卡信息")) {
+			Main.this.getContentPane().removeAll();
+			Main.this.getContentPane().add(new Cardinfo_Add(Main.this,"",""));// JPanel换成自己的panel
+			Main.this.getContentPane().validate();
+			Main.this.getContentPane().repaint();
+		} else if (e.getActionCommand().equals("添加消费")) {
+			Main.this.getContentPane().removeAll();
+			Main.this.getContentPane().add(new Costinfo_Add());// JPanel换成自己的panel
 			Main.this.getContentPane().validate();
 			Main.this.getContentPane().repaint();
 		} else if (e.getActionCommand().equals("退出")) {
 			Main.this.dispose();
 		}
+	}
+	
+	public void change(Component o){
+		Main.this.getContentPane().removeAll();
+		Main.this.getContentPane().add(o);// JPanel换成自己的panel
+		Main.this.getContentPane().validate();
+		Main.this.getContentPane().repaint();
 	}
 }

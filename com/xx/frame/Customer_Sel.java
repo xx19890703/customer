@@ -33,7 +33,9 @@ public class Customer_Sel extends JPanel implements ActionListener{
 
 	DefaultTableCellRenderer tcr = new DefaultTableCellRenderer() {  
 		  
-        public Component getTableCellRendererComponent(JTable table,  
+		private static final long serialVersionUID = 1L;
+
+		public Component getTableCellRendererComponent(JTable table,  
                 Object value, boolean isSelected, boolean hasFocus,  
                 int row, int column) {  
             if (row % 2 == 0) {  
@@ -74,6 +76,8 @@ public class Customer_Sel extends JPanel implements ActionListener{
 		model = new DefaultTableModel(cellData, headers);
 
 		table = new JTable(model) {
+			private static final long serialVersionUID = 6656802629898126354L;
+
 			public boolean isCellEditable(int row, int column) {
 				return false;
 			}

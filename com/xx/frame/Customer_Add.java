@@ -15,6 +15,8 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 import com.xx.modal.Customer;
+import com.xx.publics.util.Check;
+import com.xx.publics.util.Constants;
 import com.xx.service.CustomerService;
 
 public class Customer_Add extends JPanel implements ActionListener{
@@ -32,10 +34,13 @@ public class Customer_Add extends JPanel implements ActionListener{
 	private JComboBox month;
 	private JComboBox day;
 	private JComboBox sex;
+	
+	private Main main;
 	/**
 	 * Create the panel.
 	 */
-	public Customer_Add() {
+	public Customer_Add(Main main,String ids) {
+		this.main=main;
 		setLayout(null);
 		
 		JLabel lblNewLabel = new JLabel("会员编号：");
@@ -154,6 +159,28 @@ public class Customer_Add extends JPanel implements ActionListener{
 		button.setBounds(281, 487, 95, 31);
 		button.addActionListener(this);
 		add(button);
+		
+		JButton selbtn = new JButton("查询");
+		selbtn.setFont(new Font("宋体", Font.PLAIN, 15));
+		selbtn.setBounds(388, 40, 95, 31);
+		selbtn.addActionListener(this);
+		add(selbtn);
+		
+		JButton button_1 = new JButton("账户信息");
+		button_1.setFont(new Font("宋体", Font.PLAIN, 15));
+		button_1.setBounds(530, 40, 95, 31);
+		button_1.addActionListener(this);
+		add(button_1);
+		
+		if(!ids.equals("")&&ids!=null){
+			id.setText(ids);
+			select();
+		}else{
+			if(!Constants.id.equals("")){
+				id.setText(Constants.id);
+				select();
+			}
+		}
 	}
 	
 	
@@ -169,6 +196,16 @@ public class Customer_Add extends JPanel implements ActionListener{
 			String sexs = sex.getSelectedItem().toString();
 			String months = month.getSelectedItem().toString();
 			String days = day.getSelectedItem().toString();
+			
+			//**********校验
+			if(!Check.checkNull(new String[]{"会员编号","会员名","年龄","电话","地址"}, new String[]{ids,names,ages,tells,adds})){
+				return ;
+			}
+			if(!Check.checkNum(new String[]{"年龄"}, new String[]{ages})){
+				return ;
+			}
+			
+			//***********保存
 			Customer cus = new Customer();
 			cus.setId(ids);
 			cus.setUsername(names);
@@ -185,8 +222,28 @@ public class Customer_Add extends JPanel implements ActionListener{
 			reset();
 		} else if (e.getActionCommand().equals("清空")) {
 			reset();
-		} else if (e.getActionCommand().equals("退出")) {
-		}
+		} else if (e.getActionCommand().equals("查询")) {
+			select();
+		}else if (e.getActionCommand().equals("账户信息")) {
+			main.change(new Cardinfo_Add(this.main,id.getText(),name.getText()));
+		} 
+		
+	}
+	
+	private void select(){
+		String ids = id.getText();
+		CustomerService cs=new CustomerService();
+		Customer cus = cs.getCustomer(ids);
+		name.setText(cus.getUsername());
+		sex.setSelectedItem(cus.getSex());
+		String[] brithday = cus.getBrithday().split("\\.");
+		month.setSelectedItem(brithday[0]);
+		day.setSelectedItem(brithday[1]);
+		age.setText(""+cus.getAge());
+		tell.setText(cus.getTel());
+		address.setText(cus.getAddress());
+		memo.setText(cus.getRemarks());
+		Constants.id=ids;
 	}
 	
 	private void reset(){

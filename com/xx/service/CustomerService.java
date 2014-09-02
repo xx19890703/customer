@@ -20,10 +20,16 @@ public class CustomerService {
 		dao.save(c);
 	}
 	
+	public Customer getCustomer(String id){
+		String hql = "from Customer t where t.id=?";
+		return (Customer) dao.findUnique(hql, id);
+	}
+	
 	public void delete(Customer c){
 		dao.delete(c);
 	}
 	
+	@SuppressWarnings("unchecked")
 	public List<Customer> findAll(){
 		String hql = "from Customer t where t.status=? order by t.id";
 		return dao.find(hql, "0");
