@@ -219,6 +219,7 @@ public class Customer_Add extends JPanel implements ActionListener{
 			CustomerService cs=new CustomerService();
 			cs.save(cus);
 			JOptionPane.showMessageDialog(null, "保存成功", "提示", JOptionPane.INFORMATION_MESSAGE);
+			Constants.id = ids;
 			reset();
 		} else if (e.getActionCommand().equals("清空")) {
 			reset();
@@ -250,7 +251,7 @@ public class Customer_Add extends JPanel implements ActionListener{
 		sex.setSelectedIndex(0);
 		month.setSelectedIndex(0);
 		day.setSelectedIndex(0);
-		id.setText("");
+		//id.setText("");
 		name.setText("");
 		age.setText("");
 		tell.setText("");

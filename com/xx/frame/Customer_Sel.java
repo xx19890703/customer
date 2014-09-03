@@ -86,7 +86,7 @@ public class Customer_Sel extends JPanel implements ActionListener{
 		
 	    //大小 字体
 		table.setFont(new Font("Dialog", 0, 19));
-		table.setRowHeight(22);
+		table.setRowHeight(25);
 		
 		
 		//表格列宽
@@ -110,7 +110,8 @@ public class Customer_Sel extends JPanel implements ActionListener{
 			model.removeRow(model.getRowCount()-1);
 		}
 		CustomerService cs= new CustomerService();
-		List<Customer> list=cs.findAll();
+		String ids = textField.getText();
+		List<Customer> list=cs.findAll(ids);
 		for(Customer c:list){
 			String[] dd = {""+(model.getRowCount()+1), c.getId(), c.getUsername(),c.getSex(),
 					c.getTel(),""+c.getAge(),c.getBrithday(),c.getAddress()};

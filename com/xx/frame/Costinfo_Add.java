@@ -4,6 +4,7 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.math.BigDecimal;
+import java.util.Date;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -194,6 +195,10 @@ public class Costinfo_Add extends JPanel implements ActionListener{
 			CardinfoService cis = new CardinfoService();
 			Cardinfo ci = cis.getCardinfoByCustomer(ids);
 			BigDecimal am = ci.getAmount();
+			if((new Date()).getTime()>(DateUtil.string2Date(ci.getEndDate(), "yyyy-MM-dd")).getTime()){
+				JOptionPane.showMessageDialog(null, "会员卡已过期！", "提示", JOptionPane.INFORMATION_MESSAGE);
+				return ;
+			}
 			if(am.subtract(cos).compareTo(new BigDecimal(0))<0){
 				JOptionPane.showMessageDialog(null, "余额不足，请充值！", "提示", JOptionPane.INFORMATION_MESSAGE);
 				return ;

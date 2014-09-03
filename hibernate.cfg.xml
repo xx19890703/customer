@@ -21,5 +21,6 @@
         <mapping class="com.xx.modal.Customer"/>
         <mapping class="com.xx.modal.Cardinfo"/>
         <mapping class="com.xx.modal.Costinfo"/>
+        <mapping class="com.xx.modal.Recharge"/>
     </session-factory>  
 </hibernate-configuration> 

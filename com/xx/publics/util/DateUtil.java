@@ -121,9 +121,14 @@ public class DateUtil {
 	 * @throws ParseException
 	 */
 	public static Date string2Date(String date, String format)
-			throws ParseException {
+			 {
 		SimpleDateFormat sdf = new SimpleDateFormat(format);
-		return sdf.parse(date);
+		try {
+			return sdf.parse(date);
+		} catch (ParseException e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 	/**

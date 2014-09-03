@@ -37,6 +37,7 @@ public class Cardinfo_Add extends JPanel implements ActionListener{
 	private JComboBox eDay;
 	private JLabel userName;
 	private JButton button_1;
+	private JButton button_4;
 	private Main main;
 	/**
 	 * Create the panel.
@@ -48,7 +49,7 @@ public class Cardinfo_Add extends JPanel implements ActionListener{
 		JButton button = new JButton("查询");
 		button.addActionListener(this);
 		button.setFont(new Font("宋体", Font.PLAIN, 15));
-		button.setBounds(470, 68, 95, 31);
+		button.setBounds(502, 68, 95, 31);
 		add(button);
 		
 		id = new JTextField();
@@ -192,10 +193,16 @@ public class Cardinfo_Add extends JPanel implements ActionListener{
 		
 		JButton button_3 = new JButton("会员信息");
 		button_3.setFont(new Font("宋体", Font.PLAIN, 15));
-		button_3.setBounds(586, 68, 95, 31);
+		button_3.setBounds(624, 68, 95, 31);
 		button_3.addActionListener(this);
 		add(button_3);
-
+		
+		button_4 = new JButton("充值");
+		button_4.setFont(new Font("宋体", Font.PLAIN, 15));
+		button_4.setBounds(502, 265, 95, 31);
+		button_4.addActionListener(this);
+		add(button_4);
+		button_4.setEnabled(false);
 		
 		if(!ids.equals("")&&ids!=null){
 			id.setText(ids);
@@ -263,9 +270,18 @@ public class Cardinfo_Add extends JPanel implements ActionListener{
 			eMonth.setSelectedIndex(0);
 			eDay.setSelectedIndex(0);
 			button_1.setEnabled(true);
+			button_4.setEnabled(false);
+			Constants.id="";
 		} else if (e.getActionCommand().equals("查询")) {
 			select();
-		}else if (e.getActionCommand().equals("会员信息")) {
+		} else if (e.getActionCommand().equals("充值")) {
+//			Recharge_Add dialog = new Recharge_Add();
+//			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+//			dialog.setVisible(true);
+			String ids = id.getText();
+			Recharge_Add frame = new Recharge_Add(Cardinfo_Add.this,ids);
+			frame.setVisible(true);
+		} else if (e.getActionCommand().equals("会员信息")) {
 			main.change(new Customer_Add(this.main,id.getText()));
 		} 
 	}
@@ -294,6 +310,7 @@ public class Cardinfo_Add extends JPanel implements ActionListener{
 		eMonth.setSelectedItem(card.getEndDate().split("-")[1]);
 		eDay.setSelectedItem(card.getEndDate().split("-")[2]);
 		button_1.setEnabled(false);
-		id.setText(Constants.id);
+		button_4.setEnabled(true);
+		Constants.id=ids;
 	}
 }
