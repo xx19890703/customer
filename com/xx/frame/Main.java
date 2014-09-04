@@ -40,8 +40,11 @@ public class Main extends JFrame implements ActionListener {
 	 * Create the frame.
 	 */
 	public Main() {
+//		this.setUndecorated(true);
+//		this.getRootPane().setWindowDecorationStyle(JRootPane.COLOR_CHOOSER_DIALOG);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 800, 600);
+		setResizable(false);
 		this.setTitle("客户管理系统");
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
@@ -74,6 +77,10 @@ public class Main extends JFrame implements ActionListener {
 		JMenuItem menuItem_4 = new JMenuItem("添加消费");
 		menuItem_4.addActionListener(this);
 		menu_2.add(menuItem_4);
+		
+		JMenuItem menuItem_5 = new JMenuItem("消费历史");
+		menuItem_5.addActionListener(this);
+		menu_2.add(menuItem_5);
 
 		JMenu menu_3 = new JMenu("统计");
 		menuBar.add(menu_3);
@@ -113,6 +120,11 @@ public class Main extends JFrame implements ActionListener {
 		} else if (e.getActionCommand().equals("添加消费")) {
 			Main.this.getContentPane().removeAll();
 			Main.this.getContentPane().add(new Costinfo_Add());// JPanel换成自己的panel
+			Main.this.getContentPane().validate();
+			Main.this.getContentPane().repaint();
+		} else if (e.getActionCommand().equals("消费历史")) {
+			Main.this.getContentPane().removeAll();
+			Main.this.getContentPane().add(new Costinfo_Sel());// JPanel换成自己的panel
 			Main.this.getContentPane().validate();
 			Main.this.getContentPane().repaint();
 		} else if (e.getActionCommand().equals("退出")) {

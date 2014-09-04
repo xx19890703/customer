@@ -12,6 +12,8 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 
 import com.xx.modal.Cardinfo;
 import com.xx.modal.Customer;
@@ -43,6 +45,18 @@ public class Cardinfo_Add extends JPanel implements ActionListener{
 	 * Create the panel.
 	 */
 	public Cardinfo_Add(Main main,String ids,String name) {
+		String windows="com.sun.java.swing.plaf.windows.WindowsLookAndFeel";
+		 try {
+			UIManager.setLookAndFeel(windows);
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (InstantiationException e) {
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		} catch (UnsupportedLookAndFeelException e) {
+			e.printStackTrace();
+		}
 		this.main=main;
 		setLayout(null);
 		

@@ -5,8 +5,6 @@ import java.awt.Component;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.util.List;
 
 import javax.swing.JButton;
@@ -18,20 +16,21 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
+import javax.swing.table.TableColumn;
 
-import com.xx.modal.Customer;
+import com.xx.modal.Costinfo;
 import com.xx.publics.util.Constants;
-import com.xx.service.CustomerService;
+import com.xx.service.CostinfoService;
 
-public class Customer_Sel extends JPanel implements ActionListener {
-	/**
-	 * 
-	 */
+public class Costinfo_Sel extends JPanel implements ActionListener {
+
 	private static final long serialVersionUID = 1L;
+
 	private JTextField textField;
 	private JTable table;
 	DefaultTableModel model;
-	String[] headers = { "序号", "编号", "姓名", "性别", "电话", "年龄", "生日", "地址" };
+	String[] headers = { "序号", "编号", "姓名", "消费项目", "花费", "时间", "操作人" };
 	Object[][] cellData = null;
 
 	DefaultTableCellRenderer tcr = new DefaultTableCellRenderer() {
@@ -55,27 +54,23 @@ public class Customer_Sel extends JPanel implements ActionListener {
 	/**
 	 * Create the panel.
 	 */
-	public Customer_Sel() {
-		setLayout(null);
+	public Costinfo_Sel() {
 
 		JLabel lblNewLabel = new JLabel("用户编号：");
-		lblNewLabel.setFont(new Font("宋体", Font.PLAIN, 14));
-		lblNewLabel.setBounds(29, 28, 71, 24);
-		add(lblNewLabel);
+		lblNewLabel.setBounds(29, 28, 87, 24);
+		lblNewLabel.setFont(new Font("宋体", Font.PLAIN, 15));
 
 		textField = new JTextField();
-		textField.setBounds(110, 30, 90, 21);
-		add(textField);
+		textField.setBounds(112, 26, 111, 28);
+		textField.setFont(new Font("宋体", Font.PLAIN, 15));
 		textField.setColumns(10);
 
 		JButton btnNewButton = new JButton("查询");
+		btnNewButton.setBounds(247, 28, 62, 25);
 		btnNewButton.addActionListener(this);
-		btnNewButton.setBounds(218, 28, 62, 25);
-		add(btnNewButton);
 
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(29, 100, 734, 430);
-		add(scrollPane);
 
 		model = new DefaultTableModel(cellData, headers);
 
@@ -96,30 +91,19 @@ public class Customer_Sel extends JPanel implements ActionListener {
 		table.getColumn(headers[0]).setPreferredWidth(40);
 		table.getColumn(headers[1]).setPreferredWidth(120);
 		table.getColumn(headers[2]).setPreferredWidth(90);
-		table.getColumn(headers[3]).setPreferredWidth(40);
-		table.getColumn(headers[4]).setPreferredWidth(140);
-		table.getColumn(headers[5]).setPreferredWidth(80);
-		table.getColumn(headers[6]).setPreferredWidth(80);
-		table.getColumn(headers[7]).setPreferredWidth(140);
-
-		// 表格事件
-		table.addMouseListener(new MouseAdapter() {
-
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				if (e.getClickCount() == 2) {
-					int rowI = table.rowAtPoint(e.getPoint());// 得到table的行号
-					if (rowI > -1) {
-						Object id =	((DefaultTableModel) table.getModel()).getValueAt(rowI, 1);
-						Constants.id = id.toString();
-					}
-				}
-			}
-
-		});
+		table.getColumn(headers[3]).setPreferredWidth(120);
+		table.getColumn(headers[4]).setPreferredWidth(100);
+		table.getColumn(headers[5]).setPreferredWidth(210);
+		table.getColumn(headers[6]).setPreferredWidth(90);
 
 		scrollPane.setViewportView(table);
 
+		textField.setText(Constants.id);
+		setLayout(null);
+		add(lblNewLabel);
+		add(textField);
+		add(btnNewButton);
+		add(scrollPane);
 	}
 
 	@Override
@@ -127,17 +111,44 @@ public class Customer_Sel extends JPanel implements ActionListener {
 		while (model.getRowCount() > 0) {
 			model.removeRow(model.getRowCount() - 1);
 		}
-		CustomerService cs = new CustomerService();
+		CostinfoService cs = new CostinfoService();
 		String ids = textField.getText();
-		List<Customer> list = cs.findAll(ids);
-		for (Customer c : list) {
-			String[] dd = { "" + (model.getRowCount() + 1), c.getId(),
-					c.getUsername(), c.getSex(), c.getTel(), "" + c.getAge(),
-					c.getBrithday(), c.getAddress() };
+		List<Costinfo> list = cs.findCostinfosByCusId(ids);
+		for (Costinfo c : list) {
+			String[] dd = { "" + (model.getRowCount() + 1),
+					c.getCustomer().getId(), c.getCustomer().getUsername(),
+					c.getProjectName(), c.getCost().toString(), c.getTime(),
+					c.getOperator() };
 			model.addRow(dd);
 		}
 		for (int i = 0; i < table.getColumnCount(); i++) {
 			table.getColumn(table.getColumnName(i)).setCellRenderer(tcr);
 		}
+
+		FitTableColumns(table);
+	}
+
+	public void FitTableColumns(JTable myTable) {
+		JTableHeader header = myTable.getTableHeader();
+		int rowCount = myTable.getRowCount();
+
+		TableColumn column = table.getColumn(headers[3]);
+		int col = header.getColumnModel()
+				.getColumnIndex(column.getIdentifier());
+		int width = (int) myTable
+				.getTableHeader()
+				.getDefaultRenderer()
+				.getTableCellRendererComponent(myTable, column.getIdentifier(),
+						false, false, -1, col).getPreferredSize().getWidth();
+		for (int row = 0; row < rowCount; row++) {
+			int preferedWidth = (int) myTable
+					.getCellRenderer(row, col)
+					.getTableCellRendererComponent(myTable,
+							myTable.getValueAt(row, col), false, false, row,
+							col).getPreferredSize().getWidth();
+			width = Math.max(width, preferedWidth);
+		}
+		header.setResizingColumn(column); // 此行很重要
+		column.setWidth(width + myTable.getIntercellSpacing().width);
 	}
 }

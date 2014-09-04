@@ -3,6 +3,8 @@ package com.xx.publics.dao;
 import java.io.Serializable;
 import java.util.List;
 
+import javax.swing.JOptionPane;
+
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -17,26 +19,32 @@ public class Dao<T, PK extends Serializable> {
 	protected SessionFactory sessionFactory = null;
 	protected ServiceRegistry serviceRegistry = null;
 	protected Class<T> entityClass;
-	
-	
+
 	/**
 	 * 加一句
+	 * 
 	 * @param entityClass
 	 */
 	public Dao(Class<T> entityClass){
-		configuration = new Configuration().configure();
-		serviceRegistry = new ServiceRegistryBuilder().applySettings(
-				configuration.getProperties()).buildServiceRegistry();
-		sessionFactory = configuration.buildSessionFactory(serviceRegistry);
-		this.entityClass = entityClass;
+		try{
+			configuration = new Configuration().configure();
+			serviceRegistry = new ServiceRegistryBuilder().applySettings(
+					configuration.getProperties()).buildServiceRegistry();
+			sessionFactory = configuration.buildSessionFactory(serviceRegistry);
+			this.entityClass = entityClass;
+		}catch(Exception e){
+			JOptionPane.showMessageDialog(null, "连接数据库失败", "提示", JOptionPane.INFORMATION_MESSAGE);
+			return ;
+		}
 	}
-	
+
 	public Session getSession() {
 		return sessionFactory.getCurrentSession();
 	}
 
 	/**
 	 * 保存
+	 * 
 	 * @param entity
 	 */
 	public void save(T entity) {
@@ -45,25 +53,26 @@ public class Dao<T, PK extends Serializable> {
 		s.saveOrUpdate(entity);
 		s.getTransaction().commit();
 	}
-	
+
 	/**
 	 * 删除
+	 * 
 	 * @param entity
 	 */
-	public void delete(T entity){
+	public void delete(T entity) {
 		Session s = getSession();
 		s.getTransaction().begin();
 		s.delete(entity);
 		s.getTransaction().commit();
 	}
-	
-	public void delete(PK id){
+
+	public void delete(PK id) {
 		Session s = getSession();
 		s.getTransaction().begin();
 		s.delete(s.load(entityClass, id));
 		s.getTransaction().commit();
 	}
-	
+
 	/**
 	 * 按id获取对象.
 	 */
@@ -71,36 +80,37 @@ public class Dao<T, PK extends Serializable> {
 	public T get(final PK id) {
 		return (T) getSession().load(entityClass, id);
 	}
-	
+
 	/**
 	 * 按HQL查询对象列表.
 	 * 
-	 * @param hql hql语句
-	 * @param values 数量可变的参数
-
-
+	 * @param hql
+	 *            hql语句
+	 * @param values
+	 *            数量可变的参数
 	 */
 	@SuppressWarnings("rawtypes")
 	public List find(String hql, Object... values) {
 		Session s = getSession();
 		s.getTransaction().begin();
-		List list = createQuery(s,hql, values).list();
+		List list = createQuery(s, hql, values).list();
 		s.getTransaction().commit();
 		return list;
 	}
+
 	/**
 	 * 按HQL查询唯一对象.
 	 */
 	public Object findUnique(String hql, Object... values) {
 		Session s = getSession();
 		s.getTransaction().begin();
-		Object list = createQuery(s,hql, values).uniqueResult();
+		Object list = createQuery(s, hql, values).uniqueResult();
 		s.getTransaction().commit();
 		return list;
 	}
 
 	/**
-	 * 按HQL查询Intger类形结果. 
+	 * 按HQL查询Intger类形结果.
 	 */
 	public Integer findInt(String hql, Object... values) {
 		Session s = getSession();
@@ -109,11 +119,11 @@ public class Dao<T, PK extends Serializable> {
 		s.getTransaction().commit();
 		return list;
 	}
-	
+
 	/**
 	 * 根据查询函数与参数列表创建Query对象,后续可进行更多处理,辅助函数.
 	 */
-	public Query createQuery(Session s,String queryString, Object... values) {
+	public Query createQuery(Session s, String queryString, Object... values) {
 		Query queryObject = s.createQuery(queryString);
 		if (values != null) {
 			for (int i = 0; i < values.length; i++) {
