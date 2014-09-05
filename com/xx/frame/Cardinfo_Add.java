@@ -12,15 +12,16 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
 
 import com.xx.modal.Cardinfo;
 import com.xx.modal.Customer;
+import com.xx.modal.Recharge;
 import com.xx.publics.util.Check;
 import com.xx.publics.util.Constants;
+import com.xx.publics.util.DateUtil;
 import com.xx.service.CardinfoService;
 import com.xx.service.CustomerService;
+import com.xx.service.RechargeService;
 
 public class Cardinfo_Add extends JPanel implements ActionListener{
 	/**
@@ -45,18 +46,6 @@ public class Cardinfo_Add extends JPanel implements ActionListener{
 	 * Create the panel.
 	 */
 	public Cardinfo_Add(Main main,String ids,String name) {
-		String windows="com.sun.java.swing.plaf.windows.WindowsLookAndFeel";
-		 try {
-			UIManager.setLookAndFeel(windows);
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		} catch (InstantiationException e) {
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			e.printStackTrace();
-		} catch (UnsupportedLookAndFeelException e) {
-			e.printStackTrace();
-		}
 		this.main=main;
 		setLayout(null);
 		
@@ -82,36 +71,43 @@ public class Cardinfo_Add extends JPanel implements ActionListener{
 		sYear.setFont(new Font("宋体", Font.PLAIN, 15));
 		sYear.setBounds(136, 136, 89, 31);
 		add(sYear);
+		sYear.setSelectedItem(DateUtil.getYear());
 		
 		sMonth = new JComboBox();
 		sMonth.setModel(new DefaultComboBoxModel(new String[] {"01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"}));
 		sMonth.setFont(new Font("宋体", Font.PLAIN, 15));
 		sMonth.setBounds(276, 136, 60, 31);
 		add(sMonth);
+		sMonth.setSelectedItem(DateUtil.getMonth());
 		
 		sDay = new JComboBox();
 		sDay.setModel(new DefaultComboBoxModel(new String[] {"01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"}));
 		sDay.setFont(new Font("宋体", Font.PLAIN, 15));
 		sDay.setBounds(376, 136, 60, 31);
 		add(sDay);
+		sDay.setSelectedItem(DateUtil.getDay());
+		
 		
 		eYear = new JComboBox();
 		eYear.setModel(new DefaultComboBoxModel(new String[] {"2014", "2015", "2016", "2017", "2018", "2019", "2020", "2021", "2022", "2023", "2024", "2025"}));
 		eYear.setFont(new Font("宋体", Font.PLAIN, 15));
 		eYear.setBounds(136, 198, 89, 31);
 		add(eYear);
+		eYear.setSelectedItem("2018");
 		
 		eMonth = new JComboBox();
 		eMonth.setModel(new DefaultComboBoxModel(new String[] {"01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"}));
 		eMonth.setFont(new Font("宋体", Font.PLAIN, 15));
 		eMonth.setBounds(276, 198, 60, 31);
 		add(eMonth);
+		eMonth.setSelectedItem("12");
 		
 		eDay = new JComboBox();
 		eDay.setModel(new DefaultComboBoxModel(new String[] {"01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"}));
 		eDay.setFont(new Font("宋体", Font.PLAIN, 15));
 		eDay.setBounds(376, 198, 60, 31);
 		add(eDay);
+		eDay.setSelectedItem("31");
 		
 		sMoney = new JTextField();
 		sMoney.setFont(new Font("宋体", Font.PLAIN, 15));
@@ -269,6 +265,12 @@ public class Cardinfo_Add extends JPanel implements ActionListener{
 			ci.setStartCount(0);
 			ci.setCount(0);
 			cis.save(ci);
+			Recharge r = new Recharge();
+			r.setCard(ci);
+			r.setMoney(new BigDecimal(smoney));
+			r.setTime(DateUtil.getSystemTime());
+			RechargeService rs = new RechargeService();
+			rs.save(r);
 			JOptionPane.showMessageDialog(null, "保存成功", "提示", JOptionPane.INFORMATION_MESSAGE);
 			select();
 		} else if (e.getActionCommand().equals("清空")) {

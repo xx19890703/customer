@@ -204,8 +204,14 @@ public class Customer_Add extends JPanel implements ActionListener{
 			if(!Check.checkNum(new String[]{"年龄"}, new String[]{ages})){
 				return ;
 			}
-			
+			CustomerService cs=new CustomerService();
+			Customer cc = cs.getCustomer(ids);
+			if(cc!=null){
+				JOptionPane.showMessageDialog(null, "该帐号已存在！", "提示", JOptionPane.INFORMATION_MESSAGE);
+				return ;
+			}
 			//***********保存
+			
 			Customer cus = new Customer();
 			cus.setId(ids);
 			cus.setUsername(names);
@@ -216,7 +222,7 @@ public class Customer_Add extends JPanel implements ActionListener{
 			cus.setSex(sexs);
 			cus.setBrithday(months+"."+days);
 			cus.setStatus("0");
-			CustomerService cs=new CustomerService();
+			
 			cs.save(cus);
 			JOptionPane.showMessageDialog(null, "保存成功", "提示", JOptionPane.INFORMATION_MESSAGE);
 			Constants.id = ids;
@@ -235,6 +241,11 @@ public class Customer_Add extends JPanel implements ActionListener{
 		String ids = id.getText();
 		CustomerService cs=new CustomerService();
 		Customer cus = cs.getCustomer(ids);
+		if(cus==null){
+			reset();
+			JOptionPane.showMessageDialog(null, "该账户不存在！", "提示", JOptionPane.INFORMATION_MESSAGE);
+			return ;
+		}
 		name.setText(cus.getUsername());
 		sex.setSelectedItem(cus.getSex());
 		String[] brithday = cus.getBrithday().split("\\.");

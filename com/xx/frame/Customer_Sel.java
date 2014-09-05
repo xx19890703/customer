@@ -33,7 +33,7 @@ public class Customer_Sel extends JPanel implements ActionListener {
 	DefaultTableModel model;
 	String[] headers = { "序号", "编号", "姓名", "性别", "电话", "年龄", "生日", "地址" };
 	Object[][] cellData = null;
-
+	private Main mains;
 	DefaultTableCellRenderer tcr = new DefaultTableCellRenderer() {
 
 		private static final long serialVersionUID = 1L;
@@ -55,22 +55,25 @@ public class Customer_Sel extends JPanel implements ActionListener {
 	/**
 	 * Create the panel.
 	 */
-	public Customer_Sel() {
+	public Customer_Sel(Main main) {
+		this.mains = main;
 		setLayout(null);
 
 		JLabel lblNewLabel = new JLabel("用户编号：");
-		lblNewLabel.setFont(new Font("宋体", Font.PLAIN, 14));
-		lblNewLabel.setBounds(29, 28, 71, 24);
+		lblNewLabel.setFont(new Font("宋体", Font.PLAIN, 15));
+		lblNewLabel.setBounds(29, 28, 88, 24);
 		add(lblNewLabel);
 
 		textField = new JTextField();
-		textField.setBounds(110, 30, 90, 21);
+		textField.setFont(new Font("宋体", Font.PLAIN, 15));
+		textField.setBounds(111, 26, 142, 29);
 		add(textField);
 		textField.setColumns(10);
 
 		JButton btnNewButton = new JButton("查询");
+		btnNewButton.setFont(new Font("宋体", Font.PLAIN, 15));
 		btnNewButton.addActionListener(this);
-		btnNewButton.setBounds(218, 28, 62, 25);
+		btnNewButton.setBounds(288, 26, 80, 30);
 		add(btnNewButton);
 
 		JScrollPane scrollPane = new JScrollPane();
@@ -104,7 +107,6 @@ public class Customer_Sel extends JPanel implements ActionListener {
 
 		// 表格事件
 		table.addMouseListener(new MouseAdapter() {
-
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				if (e.getClickCount() == 2) {
@@ -112,6 +114,7 @@ public class Customer_Sel extends JPanel implements ActionListener {
 					if (rowI > -1) {
 						Object id =	((DefaultTableModel) table.getModel()).getValueAt(rowI, 1);
 						Constants.id = id.toString();
+						mains.change(new Customer_Add(mains,id.toString()));
 					}
 				}
 			}

@@ -31,6 +31,12 @@ public class DateUtil {
 		return df.format(date);
 	}
 
+	
+	public static String getSystemDate() {
+		Date date = new Date();
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+		return df.format(date);
+	}
 	/**
 	 * 获取一串日期字符串
 	 * 
@@ -131,6 +137,32 @@ public class DateUtil {
 		}
 	}
 
+	/**
+	 * 返回今年
+	 * @return
+	 */
+	public static String getYear(){
+		String s = getSystemDate();
+		return s.split("-")[0];
+	}
+	
+	/**
+	 * 返回今天月份
+	 * @return
+	 */
+	public static String getMonth(){
+		String s = getSystemDate();
+		return s.split("-")[1];
+	}
+
+	/**
+	 * 返回今天日期
+	 * @return
+	 */
+	public static String getDay(){
+		String s = getSystemDate();
+		return s.split("-")[2];
+	}
 	/**
 	 * 返回今天星期几
 	 * @return

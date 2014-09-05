@@ -16,24 +16,20 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.JTableHeader;
-import javax.swing.table.TableColumn;
 
-import com.xx.modal.Costinfo;
-import com.xx.publics.util.Check;
+import com.xx.modal.Recharge;
 import com.xx.publics.util.Constants;
-import com.xx.service.CostinfoService;
+import com.xx.service.RechargeService;
 
-public class Costinfo_Sel extends JPanel implements ActionListener {
+public class Recharge_Sel extends JPanel implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
-
 	private JTextField textField;
 	private JTable table;
 	DefaultTableModel model;
-	String[] headers = { "序号", "编号", "姓名", "消费项目", "花费", "时间", "操作人" };
+	String[] headers = { "序号", "编号", "姓名", "充值金额（元）", "时间"};
 	Object[][] cellData = null;
-
+	
 	DefaultTableCellRenderer tcr = new DefaultTableCellRenderer() {
 
 		private static final long serialVersionUID = 1L;
@@ -51,12 +47,11 @@ public class Costinfo_Sel extends JPanel implements ActionListener {
 					isSelected, hasFocus, row, column);
 		}
 	};
-
+	
 	/**
 	 * Create the panel.
 	 */
-	public Costinfo_Sel() {
-
+	public Recharge_Sel() {
 		JLabel lblNewLabel = new JLabel("用户编号：");
 		lblNewLabel.setBounds(29, 28, 87, 24);
 		lblNewLabel.setFont(new Font("宋体", Font.PLAIN, 15));
@@ -90,12 +85,10 @@ public class Costinfo_Sel extends JPanel implements ActionListener {
 		// 表格列宽
 		table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		table.getColumn(headers[0]).setPreferredWidth(40);
-		table.getColumn(headers[1]).setPreferredWidth(120);
-		table.getColumn(headers[2]).setPreferredWidth(90);
-		table.getColumn(headers[3]).setPreferredWidth(180);
-		table.getColumn(headers[4]).setPreferredWidth(100);
-		table.getColumn(headers[5]).setPreferredWidth(130);
-		table.getColumn(headers[6]).setPreferredWidth(90);
+		table.getColumn(headers[1]).setPreferredWidth(160);
+		table.getColumn(headers[2]).setPreferredWidth(140);
+		table.getColumn(headers[3]).setPreferredWidth(120);
+		table.getColumn(headers[4]).setPreferredWidth(220);
 
 		scrollPane.setViewportView(table);
 
@@ -115,48 +108,18 @@ public class Costinfo_Sel extends JPanel implements ActionListener {
 		while (model.getRowCount() > 0) {
 			model.removeRow(model.getRowCount() - 1);
 		}
-		CostinfoService cs = new CostinfoService();
+		RechargeService cs = new RechargeService();
 		String ids = textField.getText();
-		if(!Check.checkNull(new String[]{"编号"}, new String[]{ids})){
-			return ;
-		}
-		Constants.id = ids;
-		List<Costinfo> list = cs.findCostinfosByCusId(ids);
-		for (Costinfo c : list) {
+		List<Recharge> list = cs.findRechargesByCusId(ids);
+		for (Recharge c : list) {
 			String[] dd = { "" + (model.getRowCount() + 1),
-					c.getCustomer().getId(), c.getCustomer().getUsername(),
-					c.getProjectName(), c.getCost().toString(), c.getTime(),
-					c.getOperator() };
+					c.getCard().getCustomer().getId(), c.getCard().getCustomer().getUsername(),
+					c.getMoney().toString(),c.getTime()};
 			model.addRow(dd);
 		}
 		for (int i = 0; i < table.getColumnCount(); i++) {
 			table.getColumn(table.getColumnName(i)).setCellRenderer(tcr);
 		}
-
-		//FitTableColumns(table);
 	}
 
-	public void FitTableColumns(JTable myTable) {
-		JTableHeader header = myTable.getTableHeader();
-		int rowCount = myTable.getRowCount();
-
-		TableColumn column = table.getColumn(headers[3]);
-		int col = header.getColumnModel()
-				.getColumnIndex(column.getIdentifier());
-		int width = (int) myTable
-				.getTableHeader()
-				.getDefaultRenderer()
-				.getTableCellRendererComponent(myTable, column.getIdentifier(),
-						false, false, -1, col).getPreferredSize().getWidth();
-		for (int row = 0; row < rowCount; row++) {
-			int preferedWidth = (int) myTable
-					.getCellRenderer(row, col)
-					.getTableCellRendererComponent(myTable,
-							myTable.getValueAt(row, col), false, false, row,
-							col).getPreferredSize().getWidth();
-			width = Math.max(width, preferedWidth);
-		}
-		header.setResizingColumn(column); // 此行很重要
-		column.setWidth(width + myTable.getIntercellSpacing().width);
-	}
 }

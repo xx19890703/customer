@@ -32,8 +32,9 @@ public class CustomerService {
 	@SuppressWarnings("unchecked")
 	public List<Customer> findAll(String id){
 		if(id!=null&&!"".equals(id)){
-			String hql = "from Customer t where t.status=? and t.id like ? order by t.id";
-			return dao.find(hql, "0","%"+id+"%");
+			String hql = "from Customer t where t.status=? and (t.id like ? or t.username like ? ) order by t.id";
+			List<Customer> list = dao.find(hql, "0","%"+id+"%","%"+id+"%");
+			return list;
 		}else{
 			String hql = "from Customer t where t.status=? order by t.id";
 			return dao.find(hql, "0");

@@ -6,12 +6,15 @@ import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import com.xx.publics.util.Constants;
 
 public class Main extends JFrame implements ActionListener {
 
@@ -23,18 +26,6 @@ public class Main extends JFrame implements ActionListener {
 
 	
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		try {
-			Main frame = new Main();
-			frame.setVisible(true);
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
 
 	/**
 	 * Create the frame.
@@ -54,6 +45,10 @@ public class Main extends JFrame implements ActionListener {
 
 		JMenuItem menuItem = new JMenuItem("退出");
 		menuItem.addActionListener(this);
+		
+		JMenuItem mntmNewMenuItem = new JMenuItem("修改密码");
+		mntmNewMenuItem.addActionListener(this);
+		menu.add(mntmNewMenuItem);
 		menu.add(menuItem);
 
 		JMenu menu_1 = new JMenu("客户管理");
@@ -70,6 +65,10 @@ public class Main extends JFrame implements ActionListener {
 		JMenuItem menuItem_3 = new JMenuItem("会员卡信息");
 		menuItem_3.addActionListener(this);
 		menu_1.add(menuItem_3);
+		
+		JMenuItem menuItem_6 = new JMenuItem("充值历史");
+		menuItem_6.addActionListener(this);
+		menu_1.add(menuItem_6);
 
 		JMenu menu_2 = new JMenu("消费管理");
 		menuBar.add(menu_2);
@@ -109,7 +108,7 @@ public class Main extends JFrame implements ActionListener {
 			Main.this.getContentPane().repaint();
 		} else if (e.getActionCommand().equals("客户查询")) {
 			Main.this.getContentPane().removeAll();
-			Main.this.getContentPane().add(new Customer_Sel());// JPanel换成自己的panel
+			Main.this.getContentPane().add(new Customer_Sel(Main.this));// JPanel换成自己的panel
 			Main.this.getContentPane().validate();
 			Main.this.getContentPane().repaint();
 		} else if (e.getActionCommand().equals("会员卡信息")) {
@@ -127,8 +126,20 @@ public class Main extends JFrame implements ActionListener {
 			Main.this.getContentPane().add(new Costinfo_Sel());// JPanel换成自己的panel
 			Main.this.getContentPane().validate();
 			Main.this.getContentPane().repaint();
-		} else if (e.getActionCommand().equals("退出")) {
+		} else if (e.getActionCommand().equals("充值历史")) {
+			Main.this.getContentPane().removeAll();
+			Main.this.getContentPane().add(new Recharge_Sel());// JPanel换成自己的panel
+			Main.this.getContentPane().validate();
+			Main.this.getContentPane().repaint();
+		}else if (e.getActionCommand().equals("修改密码")) {
+			Change_Pass dialog = new Change_Pass();
+			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+			dialog.setVisible(true);
+		}else if (e.getActionCommand().equals("退出")) {
 			Main.this.dispose();
+			Constants.user=null;
+			Login frame = new Login();
+			frame.setVisible(true);
 		}
 	}
 	

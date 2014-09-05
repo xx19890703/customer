@@ -1,5 +1,7 @@
 package com.xx.service;
 
+import java.util.List;
+
 import com.xx.modal.Cardinfo;
 import com.xx.modal.Recharge;
 import com.xx.publics.dao.Dao;
@@ -26,6 +28,12 @@ public class RechargeService {
 	
 	public void delete(Recharge c){
 		dao.delete(c);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Recharge> findRechargesByCusId(String cusId){
+		String hql = "from Recharge t where t.card.customer.id=? order by t.time desc";
+		return dao.find(hql, cusId);
 	}
 	
 }
