@@ -4,9 +4,13 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -17,22 +21,26 @@ import javax.swing.JTextField;
 import com.xx.modal.Cardinfo;
 import com.xx.modal.Costinfo;
 import com.xx.modal.Customer;
+import com.xx.modal.Operator;
+import com.xx.modal.Project;
 import com.xx.publics.util.Check;
 import com.xx.publics.util.Constants;
 import com.xx.publics.util.DateUtil;
 import com.xx.service.CardinfoService;
 import com.xx.service.CostinfoService;
 import com.xx.service.CustomerService;
+import com.xx.service.OperatorService;
+import com.xx.service.ProjectService;
 
 public class Costinfo_Add extends JPanel implements ActionListener{
 	private static final long serialVersionUID = 1L;
 	private JTextField id;
 	private JTextField username;
 	private JTextField amount;
-	private JTextField projectName;
+	private JComboBox projectName;
 	private JTextField cost;
 	private JTextField time;
-	private JTextField operator;
+	private JComboBox operator;
 	private JTextArea costName ;
 
 	/**
@@ -82,9 +90,15 @@ public class Costinfo_Add extends JPanel implements ActionListener{
 		amount.setBounds(469, 113, 191, 32);
 		add(amount);
 		
-		projectName = new JTextField();
+		projectName = new JComboBox();
+		ProjectService ps = new ProjectService();
+		List<Project> lists = ps.findProjects();
+		List<String> pros = new ArrayList<String>();
+		for(Project p : lists){
+			pros.add(p.getProjectName());
+		}
+		projectName.setModel(new DefaultComboBoxModel(pros.toArray()));
 		projectName.setFont(new Font("宋体", Font.PLAIN, 15));
-		projectName.setColumns(10);
 		projectName.setBounds(120, 173, 191, 32);
 		add(projectName);
 		
@@ -128,9 +142,15 @@ public class Costinfo_Add extends JPanel implements ActionListener{
 		time.setBounds(469, 233, 191, 32);
 		add(time);
 		
-		operator = new JTextField();
+		operator = new JComboBox();
+		OperatorService os = new OperatorService();
+		List<Operator> lists2 = os.findOperators();
+		List<String> pros2 = new ArrayList<String>();
+		for(Operator p : lists2){
+			pros2.add(p.getProjectName());
+		}
+		operator.setModel(new DefaultComboBoxModel(pros2.toArray()));
 		operator.setFont(new Font("宋体", Font.PLAIN, 15));
-		operator.setColumns(10);
 		operator.setBounds(120, 233, 191, 32);
 		add(operator);
 		
@@ -168,13 +188,13 @@ public class Costinfo_Add extends JPanel implements ActionListener{
 			String ids = id.getText();
 			CustomerService cs=new CustomerService();
 			Customer cus = cs.getCustomer(ids);
-			String pros = projectName.getText();
+			String pros = projectName.getSelectedItem().toString();
 			String costs = cost.getText();
 			String times = time.getText();
 			String cnames = costName.getText();
-			String operas = operator.getText();
+			String operas = operator.getSelectedItem().toString();
 			//**********校验
-			if(!Check.checkNull(new String[]{"会员编号","消费项目","消费金额","消费内容","操作人"}, new String[]{ids,pros,costs,cnames,operas})){
+			if(!Check.checkNull(new String[]{"会员编号","消费项目","消费金额","操作人"}, new String[]{ids,pros,costs,operas})){
 				return ;
 			}
 			if(!Check.checkNum(new String[]{"消费金额"}, new String[]{costs})){
@@ -236,11 +256,11 @@ public class Costinfo_Add extends JPanel implements ActionListener{
 	 * 清空消费情况
 	 */
 	private void reset(){
-		projectName.setText("");
+		projectName.setSelectedIndex(0);
 		cost.setText("");
 		time.setText(DateUtil.getSystemTime());
 		costName.setText("");
-		operator.setText("");
+		operator.setSelectedIndex(0);
 		select();
 	}
 	
@@ -248,11 +268,11 @@ public class Costinfo_Add extends JPanel implements ActionListener{
 	 * 清空所有信息
 	 */
 	private void resetAll(){
-		projectName.setText("");
+		projectName.setSelectedIndex(0);
 		cost.setText("");
 		time.setText(DateUtil.getSystemTime());
 		costName.setText("");
-		operator.setText("");
+		operator.setSelectedIndex(0);
 		id.setText("");
 		amount.setText("");
 		username.setText("");

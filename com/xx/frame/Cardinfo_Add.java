@@ -261,7 +261,7 @@ public class Cardinfo_Add extends JPanel implements ActionListener{
 			ci.setStartDate(syear+"-"+smonth+"-"+sday);
 			ci.setEndDate(eyear+"-"+emonth+"-"+eday);
 			ci.setStartAmount(new BigDecimal(smoney));
-			ci.setAmount(new BigDecimal(smoney));
+			ci.setAmount(new BigDecimal(0));
 			ci.setStartCount(0);
 			ci.setCount(0);
 			cis.save(ci);

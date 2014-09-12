@@ -23,5 +23,7 @@
         <mapping class="com.xx.modal.Costinfo"/>
         <mapping class="com.xx.modal.Recharge"/>
         <mapping class="com.xx.modal.Userinfo"/>
+        <mapping class="com.xx.modal.Project"/>
+        <mapping class="com.xx.modal.Operator"/>
     </session-factory>  
 </hibernate-configuration> 
