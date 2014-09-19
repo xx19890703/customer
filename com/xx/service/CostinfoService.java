@@ -26,6 +26,12 @@ public class CostinfoService {
 		return dao.find(hql, cusId);
 	}
 	
+	@SuppressWarnings("unchecked")
+	public List<Costinfo> findCostinfosByTimes(String stime,String etime){
+		String hql = "from Costinfo t where t.time>? and t.time<? order by t.time asc";
+		return dao.find(hql,stime+" 00:00:00",etime+" 23:59:59");
+	}
+	
 	public void delete(Costinfo c){
 		dao.delete(c);
 	}

@@ -31,6 +31,11 @@ public class DateUtil {
 		return df.format(date);
 	}
 
+	public static String getTime() {
+		Date date = new Date();
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-ddHH:mm:ss");
+		return df.format(date);
+	}
 	
 	public static String getSystemDate() {
 		Date date = new Date();

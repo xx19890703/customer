@@ -83,6 +83,14 @@ public class Main extends JFrame implements ActionListener {
 
 		JMenu menu_3 = new JMenu("统计");
 		menuBar.add(menu_3);
+	
+		JMenuItem menuItem_7 = new JMenuItem("消费查询");
+		menuItem_7.addActionListener(this);
+		menu_3.add(menuItem_7);
+		
+		JMenuItem menuItem_8 = new JMenuItem("账户信息");
+		menuItem_8.addActionListener(this);
+		menu_3.add(menuItem_8);
 		contentPane = new JPanel(){
 			private static final long serialVersionUID = 1L;
 
@@ -135,6 +143,16 @@ public class Main extends JFrame implements ActionListener {
 			Change_Pass dialog = new Change_Pass();
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			dialog.setVisible(true);
+		}else if (e.getActionCommand().equals("消费查询")) {
+			Main.this.getContentPane().removeAll();
+			Main.this.getContentPane().add(new Cost_Sel_Day());// JPanel换成自己的panel
+			Main.this.getContentPane().validate();
+			Main.this.getContentPane().repaint();
+		}else if (e.getActionCommand().equals("账户信息")) {
+			Main.this.getContentPane().removeAll();
+			Main.this.getContentPane().add(new Account_Sel());// JPanel换成自己的panel
+			Main.this.getContentPane().validate();
+			Main.this.getContentPane().repaint();
 		}else if (e.getActionCommand().equals("退出")) {
 			Main.this.dispose();
 			Constants.user=null;
