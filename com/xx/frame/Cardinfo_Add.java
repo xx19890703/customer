@@ -47,7 +47,7 @@ public class Cardinfo_Add extends JPanel implements ActionListener{
 	 */
 	public Cardinfo_Add(Main main,String ids,String name) {
 		this.main=main;
-		setLayout(null);
+		//setLayout(null);
 		
 		JButton button = new JButton("查询");
 		button.addActionListener(this);
