@@ -37,7 +37,7 @@ public class Costinfo_Sel extends JPanel implements ActionListener {
 	DefaultTableCellRenderer tcr = new DefaultTableCellRenderer() {
 
 		private static final long serialVersionUID = 1L;
-
+//bran1
 		public Component getTableCellRendererComponent(JTable table,
 				Object value, boolean isSelected, boolean hasFocus, int row,
 				int column) {
